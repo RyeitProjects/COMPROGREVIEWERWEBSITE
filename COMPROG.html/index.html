@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COMP 102: Java Programming Quiz & Diagnostic Tool</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              900: '#1e3a8a',
+            },
+            java: {
+              orange: '#f89820',
+              red: '#5382a1'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    pre code {
+      font-family: 'JetBrains Mono', monospace;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.05);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(156, 163, 175, 0.5);
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-full font-sans antialiased flex flex-col transition-colors duration-200">
+
+  <!-- Header Header Navigation -->
+  <header class="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="app.showHome()">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+          <i class="fa-solid fa-code text-xl"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg leading-tight tracking-tight">COMP 102 <span class="text-blue-600 dark:text-blue-400">Mastery</span></h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Java Interactive Diagnostics</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <!-- Theme Toggle Button -->
+        <button id="themeToggle" onclick="app.toggleTheme()" class="p-2.5 rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i class="fa-solid fa-moon dark:hidden text-lg"></i>
+          <i class="fa-solid fa-sun hidden dark:block text-lg"></i>
+        </button>
+
+        <button onclick="app.showHome()" class="text-xs font-semibold px-3.5 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition flex items-center gap-2">
+          <i class="fa-solid fa-house"></i>
+          <span class="hidden sm:inline">Home</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col justify-center">
+
+    <!-- VIEW 1: HOME & DASHBOARD -->
+    <section id="view-home" class="space-y-8 py-4">
+      <div class="text-center max-w-3xl mx-auto space-y-3">
+        <span class="px-3 py-1 text-xs font-bold rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 inline-block">
+          Official Course Assessment Practice
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          Master Java Fundamentals with Real-time Diagnostics
+        </h2>
+        <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base">
+          Practice questions from COMP 102 Quizzes 1, 2, and 3. Get detailed strength and weakness breakdowns on Conditionals, Loops, and Array manipulation.
+        </p>
+      </div>
+
+      <!-- Mode Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <!-- Full Exam Card -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+          <div class="space-y-4">
+            <div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-slate-900 dark:text-white">Comprehensive Final Exam</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                Full 65-question diagnostic across all topics (Conditionals, Loops, & Arrays).
+              </p>
+            </div>
+            <div class="flex items-center gap-4 text-xs font-semibold text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800">
+              <span><i class="fa-regular fa-clock mr-1"></i> ~30 min</span>
+              <span><i class="fa-solid fa-list-check mr-1"></i> 65 Questions</span>
+            </div>
+          </div>
+          <button onclick="app.startQuiz('all')" class="mt-6 w-full py-3 px-4 rounded-xl font-semibold text-sm bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/25 transition flex items-center justify-center gap-2">
+            <span>Start Full Exam</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </button>
+        </div>
+
+        <!-- Topic Selector Card -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+          <div class="space-y-4">
+            <div class="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-bullseye"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-slate-900 dark:text-white">Topic Practice</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                Target specific modules to sharpen weak areas before your final test.
+              </p>
+            </div>
+            <div class="space-y-2 pt-2">
+              <select id="topicSelect" class="w-full text-xs rounded-lg p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-medium focus:ring-2 focus:ring-blue-500 outline-none">
+                <option value="Conditionals">Module 1: Conditionals & Logic (Quiz 1)</option>
+                <option value="Loops">Module 2: Loops & Iteration (Quiz 2)</option>
+                <option value="Arrays">Module 3: Arrays & Indexing (Quiz 3)</option>
+              </select>
+            </div>
+          </div>
+          <button onclick="app.startQuiz(document.getElementById('topicSelect').value)" class="mt-6 w-full py-3 px-4 rounded-xl font-semibold text-sm bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-500/25 transition flex items-center justify-center gap-2">
+            <span>Practice Topic</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </button>
+        </div>
+
+        <!-- Settings / Quick Quiz -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+          <div class="space-y-4">
+            <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-bolt"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-slate-900 dark:text-white">Quick 15-Question Quiz</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                A fast randomized mix across all topics for quick study sessions.
+              </p>
+            </div>
+            <div class="pt-2">
+              <label class="flex items-center space-x-2 text-xs font-semibold text-slate-600 dark:text-slate-400 cursor-pointer">
+                <input type="checkbox" id="instantFeedbackToggle" checked class="rounded border-slate-300 dark:border-slate-700 text-blue-600 focus:ring-blue-500">
+                <span>Instant Answer Feedback</span>
+              </label>
+            </div>
+          </div>
+          <button onclick="app.startQuiz('quick')" class="mt-6 w-full py-3 px-4 rounded-xl font-semibold text-sm bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-500/25 transition flex items-center justify-center gap-2">
+            <span>Launch Quick Quiz</span>
+            <i class="fa-solid fa-play text-xs"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Syllabus Knowledge Map Summary -->
+      <div class="max-w-5xl mx-auto bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800">
+        <h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-book-open text-blue-500"></i> Course Topics Covered
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+          <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 space-y-1">
+            <div class="font-semibold text-blue-600 dark:text-blue-400">Conditionals</div>
+            <p class="text-slate-500 dark:text-slate-400">if-else, switch fall-through, ternary operators, boolean expression evaluations, floating semicolons.</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 space-y-1">
+            <div class="font-semibold text-amber-600 dark:text-amber-400">Loops & Control</div>
+            <p class="text-slate-500 dark:text-slate-400">for, while, do-while execution guarantees, break vs continue statements, counter mutation, nested loop tracing.</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 space-y-1">
+            <div class="font-semibold text-emerald-600 dark:text-emerald-400">Arrays</div>
+            <p class="text-slate-500 dark:text-slate-400">Instantiation syntax, zero-indexed offset logic, array.length property, default values, OutOfBounds handling.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: QUIZ INTERFACE -->
+    <section id="view-quiz" class="hidden max-w-4xl mx-auto w-full space-y-6">
+      <!-- Quiz Progress Header -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+        <div class="flex items-center justify-between text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-400">
+          <div class="flex items-center gap-2">
+            <span id="quizTopicBadge" class="px-2.5 py-1 rounded-md bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs font-bold">Topic</span>
+            <span>Question <span id="currentQNum">1</span> of <span id="totalQNum">10</span></span>
+          </div>
+          <div class="flex items-center gap-4">
+            <div class="flex items-center gap-1.5 text-slate-700 dark:text-slate-300">
+              <i class="fa-regular fa-clock text-blue-500"></i>
+              <span id="timerDisplay" class="font-mono font-bold">00:00</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+              <i class="fa-solid fa-circle-check"></i>
+              <span id="scoreTracker" class="font-bold">0 Correct</span>
+            </div>
+          </div>
+        </div>
+        <!-- Progress Bar -->
+        <div class="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+          <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-indigo-600 h-full w-0 transition-all duration-300 rounded-full"></div>
+        </div>
+      </div>
+
+      <!-- Question Box -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+        <div class="space-y-4">
+          <h3 id="questionText" class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white leading-snug">
+            Question loading...
+          </h3>
+
+          <!-- Code Snippet Area (Only displayed if question has code) -->
+          <div id="codeSnippetWrapper" class="hidden">
+            <div class="bg-slate-950 rounded-xl overflow-hidden border border-slate-800 shadow-inner">
+              <div class="bg-slate-900 px-4 py-2 border-b border-slate-800 flex items-center justify-between text-xs text-slate-400 font-mono">
+                <span class="flex items-center gap-2"><i class="fa-solid fa-file-code text-blue-400"></i> CodeSnippet.java</span>
+                <span class="text-slate-500">Java SE</span>
+              </div>
+              <pre class="p-4 text-xs sm:text-sm text-slate-200 overflow-x-auto custom-scrollbar font-mono"><code id="codeSnippet"></code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Options Form -->
+        <div id="optionsContainer" class="space-y-3 pt-2">
+          <!-- Dynamically filled with options -->
+        </div>
+
+        <!-- Explanation Banner (Shown after answering in Instant Mode) -->
+        <div id="explanationBox" class="hidden p-4 rounded-xl border transition-all text-xs sm:text-sm space-y-1">
+          <div class="font-bold flex items-center gap-2" id="explanationTitle">
+            <!-- Correct/Incorrect icon & title -->
+          </div>
+          <p id="explanationText" class="text-slate-600 dark:text-slate-300 font-medium">
+            <!-- Detailed explanation -->
+          </p>
+        </div>
+
+        <!-- Action Footer -->
+        <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+          <button id="prevBtn" onclick="app.prevQuestion()" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5">
+            <i class="fa-solid fa-arrow-left"></i> Previous
+          </button>
+          
+          <button id="nextBtn" onclick="app.nextQuestion()" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 transition flex items-center gap-1.5">
+            <span>Next Question</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: DIAGNOSTIC & RESULTS SUMMARY -->
+    <section id="view-results" class="hidden max-w-5xl mx-auto w-full space-y-8 py-4">
+      <!-- Overview Card -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm text-center space-y-6">
+        <div class="inline-flex p-3 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400">
+          <i class="fa-solid fa-square-poll-vertical text-4xl"></i>
+        </div>
+        <div class="space-y-2">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Diagnostic Performance Summary</h2>
+          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
+            Here is your diagnostic breakdown. Review your strong topics and target your weak points before taking your official COMP 102 exams.
+          </p>
+        </div>
+
+        <!-- Key Metrics Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto pt-2">
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+            <div class="text-xs font-semibold text-slate-500 dark:text-slate-400">Final Score</div>
+            <div id="resScore" class="text-2xl sm:text-3xl font-black text-blue-600 dark:text-blue-400 mt-1">0/0</div>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+            <div class="text-xs font-semibold text-slate-500 dark:text-slate-400">Accuracy</div>
+            <div id="resAccuracy" class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">0%</div>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+            <div class="text-xs font-semibold text-slate-500 dark:text-slate-400">Time Taken</div>
+            <div id="resTime" class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1 font-mono">00:00</div>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+            <div class="text-xs font-semibold text-slate-500 dark:text-slate-400">Mastery Grade</div>
+            <div id="resGrade" class="text-2xl sm:text-3xl font-black text-amber-500 mt-1">N/A</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strengths & Weaknesses Analysis Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Strengths Box -->
+        <div class="bg-emerald-50/50 dark:bg-emerald-950/20 rounded-2xl p-6 border border-emerald-200 dark:border-emerald-800/50 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-bold text-lg">
+              <i class="fa-solid fa-award"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base">Key Strengths (≥80%)</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Concepts you have thoroughly mastered</p>
+            </div>
+          </div>
+          <ul id="strengthsList" class="space-y-2 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
+            <!-- Dynamic Strengths -->
+          </ul>
+        </div>
+
+        <!-- Weaknesses & Study Focus Box -->
+        <div class="bg-rose-50/50 dark:bg-rose-950/20 rounded-2xl p-6 border border-rose-200 dark:border-rose-800/50 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-rose-500 text-white flex items-center justify-center font-bold text-lg">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base">Weaknesses & Focus Areas (&lt;70%)</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Recommended topics for immediate review</p>
+            </div>
+          </div>
+          <ul id="weaknessesList" class="space-y-2 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
+            <!-- Dynamic Weaknesses -->
+          </ul>
+        </div>
+      </div>
+
+      <!-- Topic Performance Breakdown Chart -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+        <h3 class="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+          <i class="fa-solid fa-chart-bar text-blue-500"></i> Module Performance Breakdown
+        </h3>
+        <div class="h-64 relative">
+          <canvas id="topicChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Question Level Breakdown & Explanations -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+        <h3 class="font-bold text-slate-900 dark:text-white text-base flex items-center justify-between">
+          <span><i class="fa-solid fa-list-check text-blue-500 mr-2"></i> Detailed Question Review</span>
+          <span class="text-xs font-normal text-slate-500">Review all questions & logic</span>
+        </h3>
+        <div id="questionsReviewContainer" class="space-y-4 max-h-[600px] overflow-y-auto custom-scrollbar pr-2">
+          <!-- Dynamic Review Items -->
+        </div>
+      </div>
+
+      <!-- Retake Buttons -->
+      <div class="flex flex-wrap items-center justify-center gap-4 py-4">
+        <button onclick="app.showHome()" class="px-6 py-3 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 font-semibold text-sm transition flex items-center gap-2">
+          <i class="fa-solid fa-house"></i>
+          <span>Return Home</span>
+        </button>
+        <button onclick="app.restartQuiz()" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-lg shadow-blue-500/25 transition flex items-center gap-2">
+          <i class="fa-solid fa-rotate-right"></i>
+          <span>Retake Quiz</span>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-4 text-center text-xs text-slate-500 dark:text-slate-400">
+    <div class="max-w-7xl mx-auto px-4">
+      COMP 102 Computer Programming 1 &bull; Conditionals, Loops, & Arrays Diagnostic Engine
+    </div>
+  </footer>
+
+  <!-- Quiz Application Logic Script -->
+  <script>
+    // Complete Comprehensive Question Bank compiled directly from COMP 102 Quizzes 1, 2, and 3
+    const ALL_QUESTIONS = [
+      // ---------------- MODULE 1: CONDITIONALS (QUIZ 1) ----------------
+      {
+        id: 1,
+        topic: "Conditionals",
+        question: "What is the output of the following code?",
+        code: `int x = 5;\nif (x > 3) {\n    System.out.print("A");\n}\nSystem.out.print("B");`,
+        options: ["A", "B", "AB", "(No output)"],
+        answer: 2,
+        explanation: "The condition `x > 3` evaluates to true (5 > 3), so 'A' is printed. Then execution continues outside the block and prints 'B', producing 'AB'."
+      },
+      {
+        id: 2,
+        topic: "Conditionals",
+        question: "What is printed by this nested conditional code?",
+        code: `boolean isRaining = true;\nboolean hasUmbrella = false;\nif (isRaining) {\n    if (hasUmbrella){\n        System.out.println("Take a walk");\n    } else {\n        System.out.println("Stay inside");\n    }\n} else {\n    System.out.println("Enjoy the sun");\n}`,
+        options: ["Take a walk", "Stay inside", "Enjoy the sun", "(No output)"],
+        answer: 1,
+        explanation: "`isRaining` is true so it enters the outer block. `hasUmbrella` is false, executing the inner `else` block which prints 'Stay inside'."
+      },
+      {
+        id: 3,
+        topic: "Conditionals",
+        question: "What is the output of this switch statement lacking break keywords?",
+        code: `int day = 3;\nswitch (day) {\n    case 1:\n        System.out.println("Monday");\n    case 2:\n        System.out.println("Tuesday");\n    case 3:\n        System.out.println("Wednesday");\n    default:\n        System.out.println("Weekend");\n}`,
+        options: ["Wednesday", "Compiler Error", "Weekend", "Wednesday Weekend"],
+        answer: 3,
+        explanation: "Since case 3 matches, 'Wednesday' is printed. Because there is no `break` statement, execution falls through into the `default` block, printing 'Weekend' as well."
+      },
+      {
+        id: 4,
+        topic: "Conditionals",
+        question: "What is printed by this grade switch statement?",
+        code: `char grade = 'B';\nswitch (grade) {\n    case 'A':\n        System.out.println("Excellent");\n        break;\n    case 'B':\n    case 'C':\n        System.out.println("Well done");\n        break;\n    case 'D':\n        System.out.println("Passed");\n        break;\n    default:\n        System.out.println("Invalid grade");\n}`,
+        options: ["Excellent", "Well done", "Passed", "Invalid grade"],
+        answer: 1,
+        explanation: "Grade 'B' falls through to case 'C' share block, executing `System.out.println(\"Well done\")` and breaking."
+      },
+      {
+        id: 5,
+        topic: "Conditionals",
+        question: "What is the output of this traditional switch statement?",
+        code: `int option = 2;\nString output;\nswitch (option) {\n    case 1:\n        output = "First";\n    case 2:\n        output = "Second";\n    case 3:\n        output = "Third";\n    default:\n        output = "Unknown";\n}\nSystem.out.println(output);`,
+        options: ["Second", "Third", "Unknown", "Second Third Unknown"],
+        answer: 2,
+        explanation: "Option 2 sets `output = \"Second\"`. Due to missing break statements, it falls through to case 3 (`output = \"Third\"`) and then default (`output = \"Unknown\"`). Final printed value is 'Unknown'."
+      },
+      {
+        id: 6,
+        topic: "Conditionals",
+        question: "What is printed by this ternary operator evaluation?",
+        code: `int x = 5, y = 10;\nSystem.out.println((x > y) ? "X is greater" : "Y is greater");`,
+        options: ["X is greater", "Y is greater", "5", "10"],
+        answer: 1,
+        explanation: "5 > 10 is false, so the ternary operator selects the second expression: 'Y is greater'."
+      },
+      {
+        id: 7,
+        topic: "Conditionals",
+        question: "What is the value assigned to grade?",
+        code: `int score = 85;\nchar grade = (score >= 90) ? 'A' : (score >= 80) ? 'B' : 'C';`,
+        options: ["'A'", "'B'", "'C'", "Compiler Error"],
+        answer: 1,
+        explanation: "`score >= 90` (85 >= 90) is false. It evaluates the second condition `score >= 80` (85 >= 80), which is true, yielding 'B'."
+      },
+      {
+        id: 8,
+        topic: "Conditionals",
+        question: "What is the value of message in this boolean expression?",
+        code: `boolean isSunny = true;\nboolean isWeekend = false;\nString message = (isSunny && isWeekend)? "Go to park" : \n                (isSunny) ? "Take a walk" : "Stay home";`,
+        options: ["\"Go to park\"", "\"Stay home\"", "\"Take a walk\"", "Compiler Error"],
+        answer: 2,
+        explanation: "`isSunny && isWeekend` is `true && false` => false. Next condition `(isSunny)` is true, returning 'Take a walk'."
+      },
+      {
+        id: 9,
+        topic: "Conditionals",
+        question: "What is printed by this unbracketed if statement?",
+        code: `int x = 11;\nif (x < 10) \n    System.out.println("Less");\n    System.out.println("Than ten");`,
+        options: ["Less", "Than ten", "Less Than ten", "Compiler Error"],
+        answer: 1,
+        explanation: "Without curly braces, only the first `System.out.println(\"Less\");` belongs to the if statement. Since x < 10 is false, 'Less' is skipped. The second line runs unconditionally, printing 'Than ten'."
+      },
+      {
+        id: 10,
+        topic: "Conditionals",
+        question: "What is the final value of count?",
+        code: `int count = 0;\nboolean flag1 = true, flag2 = false;\nif (flag1) {\n    if (flag2) {\n        count = 1;\n    } else {\n        count = 2;\n    }\n} else {\n    count = 3;\n}`,
+        options: ["0", "1", "2", "3"],
+        answer: 2,
+        explanation: "`flag1` is true. `flag2` is false, leading into the inner `else` branch where `count` becomes 2."
+      },
+      {
+        id: 11,
+        topic: "Conditionals",
+        question: "What is printed if age is 20?",
+        code: `int age = 20;\nif (age >= 18) {\n    System.out.print("You are an adult. ");\n}\nSystem.out.println("Proceed.");`,
+        options: ["You are an adult. Proceed.", "Proceed.", "You are an adult.", "Nothing is printed."],
+        answer: 0,
+        explanation: "`age >= 18` is true, so 'You are an adult. ' is printed, followed immediately by 'Proceed.'."
+      },
+      {
+        id: 12,
+        topic: "Conditionals",
+        question: "What will the following code output when x is 15?",
+        code: `int x = 15;\nif (x > 15) {\n    System.out.println("x is 15");\n} else {\n    System.out.println("x is not 15");\n}`,
+        options: ["x is 15", "x is not 15", "15", "No output"],
+        answer: 1,
+        explanation: "15 > 15 evaluates to false (15 is equal to 15, not strictly greater). The else block executes."
+      },
+      {
+        id: 13,
+        topic: "Conditionals",
+        question: "Analyze the output when x is 5:",
+        code: `int x = 5;\nif (x > 10) {\n    System.out.println("x is greater than 10");\n} else if (x > 5) {\n    System.out.println("x is greater than 5");\n} else {\n    System.out.println("x is 5 or less");\n}`,
+        options: ["x is greater than 10", "x is 5 or less", "x is greater than 5", "No output"],
+        answer: 1,
+        explanation: "Both `x > 10` and `x > 5` are false when x = 5. Execution falls into the default `else` block."
+      },
+      {
+        id: 14,
+        topic: "Conditionals",
+        question: "Analyze the conditional logic containing a semicolon after if statement:",
+        code: `int s = 20;  \nif(s>20); \nremark = "AAA"; \nelse  \nremark = "BBB";`,
+        options: ["AAA", "BBB", "AAABBB", "Error"],
+        answer: 3,
+        explanation: "The semicolon `;` after `if(s>20);` terminates the if statement body. The subsequent line `remark = \"AAA\";` becomes an unattached statement, causing a syntax 'else without if' compiler error."
+      },
+      {
+        id: 15,
+        topic: "Conditionals",
+        question: "What is the value of remark when s is 30?",
+        code: `int s = 30; \nif (s > 30) {remark = "AAA"; } \nelse {remark = "BBB"; }`,
+        options: ["AAA", "BBB", "AAABBB", "No Output"],
+        answer: 1,
+        explanation: "30 > 30 is false. The `else` block assigns 'BBB' to `remark`."
+      },
+      {
+        id: 16,
+        topic: "Conditionals",
+        question: "Assuming variable k is initialized to 7, which statement sets m to 0?",
+        code: `// k = 7\nA) if(k<3 && k<20) m = 0;\nB) if(k>3 && k==0) m = 0;\nC) if(k>3 && k>6) m = 0;\nD) if(k>3 && k<0) m = 0;`,
+        options: ["if(k<3 && k<20) m= 0;", "if(k>3 && k==0) m= 0;", "if (k>3 && k >6) m =0;", "if (k>3&& k<0) m= 0;"],
+        answer: 2,
+        explanation: "With k = 7: Option C checks `(7 > 3 && 7 > 6)` which is `true && true` = true. Thus `m = 0` is executed."
+      },
+      {
+        id: 17,
+        topic: "Conditionals",
+        question: "Assuming variable q is assigned 3, which statement prints YYY?",
+        code: `// q = 3\nA) if(q!=3) remark = "YYY";\nB) if(q<3) remark = "YYY";\nC) if(q>=3) remark = "YYY";\nD) if(q>3) remark = "YYY";`,
+        options: ["if(q!=3) remark = \"YYY\";", "if(q<3) remark = \"YYY\";", "if(q>=3) remark = \"YYY\";", "if(q>3) remark = \"YYY\";"],
+        answer: 2,
+        explanation: "`q >= 3` is `3 >= 3` which evaluates to true."
+      },
+      {
+        id: 18,
+        topic: "Conditionals",
+        question: "Assuming x is 11, which condition sets y to 5?",
+        code: `// x = 11\nA) if (x < 10) y = 5;\nB) if (x == 12) y = 5;\nC) if (x > 10 && x < 15) y = 5;\nD) if (x >= 12) y = 5;`,
+        options: ["if (x < 10) y = 5;", "if (x == 12) y = 5;", "if (x > 10 && x < 15) y = 5;", "if (x >= 12) y = 5;"],
+        answer: 2,
+        explanation: "11 is greater than 10 AND less than 15 (`11 > 10 && 11 < 15` is true)."
+      },
+      {
+        id: 19,
+        topic: "Conditionals",
+        question: "What is the value of remark when score is 65?",
+        code: `int score = 65;\nif (score >= 90) remark = "A"; \nelse if (score >= 80) remark = "B"; \nelse if (score >= 75) remark = "C"; \nelse remark = "D";`,
+        options: ["A", "B", "C", "D"],
+        answer: 3,
+        explanation: "Score 65 is less than 90, 80, and 75, so execution drops into the final `else` branch, setting `remark = \"D\"`."
+      },
+      {
+        id: 20,
+        topic: "Conditionals",
+        question: "What will the FizzBuzz code snippet print if num is 15?",
+        code: `int num = 15; // evaluated with num=15\nif (num % 3 == 0 && num % 5 == 0) {\n    System.out.println("FizzBuzz");\n} else if (num % 3 == 0) {\n    System.out.println("Fizz");\n} else if (num % 5 == 0) {\n    System.out.println("Buzz");\n} else {\n    System.out.println(num);\n}`,
+        options: ["Fizz", "Buzz", "FizzBuzz", "15"],
+        answer: 2,
+        explanation: "15 is divisible by both 3 (`15 % 3 == 0`) and 5 (`15 % 5 == 0`). The first condition is true, printing 'FizzBuzz'."
+      },
+      {
+        id: 21,
+        topic: "Conditionals",
+        question: "What will be the output when temperature is 30?",
+        code: `int temperature = 30;\nString weather;\nif (temperature > 30) {\n    weather = "Hot";\n} else if (temperature < 15) {\n    weather = "Cold";\n} else {\n    weather = "Mild";\n}\nSystem.out.println(weather);`,
+        options: ["Hot", "Cold", "Mild", "No output"],
+        answer: 2,
+        explanation: "30 > 30 is false and 30 < 15 is false, so `weather` is set to 'Mild'."
+      },
+      {
+        id: 22,
+        topic: "Conditionals",
+        question: "What is the output of the given code?",
+        code: `int x = 3;  \nint y = x - 1; // y = 2 \nint a = 5;   \nif ( x < y || y < a )   \n    System.out.println(a*y / 5);   \nelse   \n    System.out.println(x*y);`,
+        options: ["1", "2", "3", "7"],
+        answer: 1,
+        explanation: "`x = 3`, `y = 2`, `a = 5`. Condition `(3 < 2 || 2 < 5)` -> `false || true` -> true. Performs integer math: `(5 * 2) / 5` = `10 / 5` = 2."
+      },
+      {
+        id: 23,
+        topic: "Conditionals",
+        question: "What is the output of the given program?",
+        code: `int x = 4, y = 5, a = 2;   \nif ( x > y && y != a )   \n    System.out.println(x+y);   \nelse   \n    System.out.println(x*y);`,
+        options: ["9", "30", "20", "45"],
+        answer: 2,
+        explanation: "`x > y` is `4 > 5` (false). Since it uses `&&`, the expression is false. The `else` branch prints `x * y` = `4 * 5` = 20."
+      },
+      {
+        id: 24,
+        topic: "Conditionals",
+        question: "What is the final value of x?",
+        code: `int d = 1, e = 2, l = 3, x = 4;   \nif (d > e && e <= l) \n    ++x;\nelse \n    --x;`,
+        options: ["3", "5", "4", "0"],
+        answer: 0,
+        explanation: "`1 > 2` is false, so condition fails. Execution runs `--x`, decreasing x from 4 to 3."
+      },
+
+      // ---------------- MODULE 2: LOOPS & ITERATION (QUIZ 2) ----------------
+      {
+        id: 25,
+        topic: "Loops",
+        question: "Which loop is guaranteed to execute at least once regardless of condition?",
+        code: "",
+        options: ["for loop", "do-while loop", "while loop", "None of the above"],
+        answer: 1,
+        explanation: "The `do-while` loop evaluates its test condition at the bottom of the loop body, guaranteeing at least one execution."
+      },
+      {
+        id: 26,
+        topic: "Loops",
+        question: "What does the continue statement do in a loop?",
+        code: "",
+        options: [
+          "Terminates the entire program",
+          "Exits the current loop entirely",
+          "Skips to the next iteration of the loop",
+          "Restarts the loop from the beginning"
+        ],
+        answer: 2,
+        explanation: "The `continue` statement skips the remainder of the current iteration body and jumps directly to the next iteration evaluation."
+      },
+      {
+        id: 27,
+        topic: "Loops",
+        question: "Which keyword is used to terminate a loop prematurely?",
+        code: "",
+        options: ["stop", "exit", "break", "halt"],
+        answer: 2,
+        explanation: "`break` immediately exits the enclosing loop or switch statement."
+      },
+      {
+        id: 28,
+        topic: "Loops",
+        question: "Which loop header(s) will execute exactly 5 times?",
+        code: `A) for(int i = 0; i < 5; i++)\nB) for(int i = 5; i > 0; i--)\nC) for(int i = 1; i <= 5; i++)`,
+        options: [
+          "for(int i = 0; i < 5; i++)",
+          "for(int i = 5; i > 0; i--)",
+          "for(int i = 1; i <= 5; i++)",
+          "All of the above"
+        ],
+        answer: 3,
+        explanation: "A (0,1,2,3,4), B (5,4,3,2,1), and C (1,2,3,4,5) all execute 5 times."
+      },
+      {
+        id: 29,
+        topic: "Loops",
+        question: "What is the correct structure for a basic for loop header in Java?",
+        code: "",
+        options: [
+          "for (initialization, condition, update)",
+          "for (initialization; condition; update)",
+          "for (condition; initialization; update)",
+          "for {initialization; condition; update}"
+        ],
+        answer: 1,
+        explanation: "Java `for` loops separate initialization, condition, and update expressions with semicolons `;` inside parentheses."
+      },
+      {
+        id: 30,
+        topic: "Loops",
+        question: "How many times will this while loop execute?",
+        code: `int count = 5;\nwhile(count < 5) {\n    System.out.println("Hello");\n    count++;\n}`,
+        options: ["5 times", "1 time", "0 times", "Infinite times"],
+        answer: 2,
+        explanation: "Initially `count = 5`. The condition `count < 5` (5 < 5) is false at start, so the loop body never executes."
+      },
+      {
+        id: 31,
+        topic: "Loops",
+        question: "What will this loop code print?",
+        code: `for(int i = 0; i < 3; i++) {\n    if(i == 1) continue;\n    System.out.print(i + " ");\n}`,
+        options: ["0 2 ", "0 1 2 ", "1 2 ", "0 1 "],
+        answer: 0,
+        explanation: "When i = 0, prints '0 '. When i = 1, `continue` skips print. When i = 2, prints '2 '. Result: '0 2 '."
+      },
+      {
+        id: 32,
+        topic: "Loops",
+        question: "What is the value of x after this loop executes?",
+        code: `int x = 0;\nfor(int i = 1; i <= 4; i++) {\n    x += i;\n}`,
+        options: ["4", "6", "10", "15"],
+        answer: 2,
+        explanation: "Accumulation: x = 0 + 1 + 2 + 3 + 4 = 10."
+      },
+      {
+        id: 33,
+        topic: "Loops",
+        question: "What does this loop print?",
+        code: `for(int i = 0; i < 5; i += 2) {\n    System.out.print(i + " ");\n}`,
+        options: ["0 2 4 ", "0 1 2 3 4 ", "0 2 ", "1 3 5 "],
+        answer: 0,
+        explanation: "Iterates with step of +2: i = 0, 2, 4. Stops when i becomes 6."
+      },
+      {
+        id: 34,
+        topic: "Loops",
+        question: "What is the output of this do-while loop?",
+        code: `int num = 0;\ndo {\n    System.out.print(num + " ");\n    num++;\n} while(num < 0);`,
+        options: ["Nothing is printed", "0 ", "0 1 ", "Infinite loop"],
+        answer: 1,
+        explanation: "`do-while` executes body first (prints '0 ', num becomes 1). Then condition `1 < 0` is false, stopping loop."
+      },
+      {
+        id: 35,
+        topic: "Loops",
+        question: "What is the final result of sum?",
+        code: `int sum = 0;\nfor(int i = 0; i <= 10; i++) {\n    if(i == 5) {\n        break;\n    }\n    sum += i;\n}\nSystem.out.println(sum);`,
+        options: ["55", "10", "15", "45"],
+        answer: 1,
+        explanation: "Loops for i = 0, 1, 2, 3, 4. Sum = 0 + 1 + 2 + 3 + 4 = 10. At i = 5, break terminates the loop."
+      },
+      {
+        id: 36,
+        topic: "Loops",
+        question: "What is the output of this loop?",
+        code: `for(int i = 1; i <= 3; i++) {\n    System.out.print(i * 2 + " ");\n}`,
+        options: ["1 2 3 ", "2 4 6 ", "1 4 9 ", "2 3 4 "],
+        answer: 1,
+        explanation: "Calculates i * 2 for i = 1, 2, 3 -> (2, 4, 6)."
+      },
+      {
+        id: 37,
+        topic: "Loops",
+        question: "What is printed by this loop with logical OR continue condition?",
+        code: `for(int i = 0; i < 4; i++) {\n    if(i == 1 || i == 3) continue;\n    System.out.print(i + " ");\n}`,
+        options: ["0 1 2 3 ", "0 2 ", "1 3 ", "0 1 3 "],
+        answer: 1,
+        explanation: "Skips iterations when i is 1 or 3. Prints only when i is 0 and 2 ('0 2 ')."
+      },
+      {
+        id: 38,
+        topic: "Loops",
+        question: "What is the output of this decrementing do-while loop?",
+        code: `int i = 5;\ndo {\n    System.out.print(i + " ");\n    i -= 2;\n} while(i > 0);`,
+        options: ["5 3 1 ", "5 3 ", "5 3 1 -1 ", "5 "],
+        answer: 0,
+        explanation: "Iteration 1: prints 5, i becomes 3. Iteration 2: prints 3, i becomes 1. Iteration 3: prints 1, i becomes -1. Condition -1 > 0 is false. Output: '5 3 1 '."
+      },
+      {
+        id: 39,
+        topic: "Loops",
+        question: "What is the output of this loop?",
+        code: `for(int i = 10; i > 6; i--) {\n    System.out.print(i + " ");\n    if(i == 8) break;\n}`,
+        options: ["10 9 8 ", "10 9 ", "10 9 8 7 ", "10 "],
+        answer: 0,
+        explanation: "i = 10 (prints 10), i = 9 (prints 9), i = 8 (prints 8, hits break). Output: '10 9 8 '."
+      },
+      {
+        id: 40,
+        topic: "Loops",
+        question: "How many numbers will be printed when counter i is mutated inside the loop body?",
+        code: `for (int i = 0; i < 10; i++) {\n    System.out.print(i);\n    i++; \n}`,
+        options: ["10", "5", "9", "Infinite"],
+        answer: 1,
+        explanation: "i increases twice per iteration (once in loop body `i++`, once in header update `i++`). Values printed: 0, 2, 4, 6, 8 (total 5 numbers)."
+      },
+      {
+        id: 41,
+        topic: "Loops",
+        question: "What is the final value of x?",
+        code: `int x = 1;\nfor (int i = 0; i < 3; i++) {\n    x *= 2;\n}`,
+        options: ["2", "4", "8", "6"],
+        answer: 2,
+        explanation: "Multiplies x by 2 three times: 1 * 2 * 2 * 2 = 8."
+      },
+      {
+        id: 42,
+        topic: "Loops",
+        question: "What is the output of this nested loop?",
+        code: `for (int i = 0; i < 2; i++) {\n    for (int j = 0; j < 2; j++) {\n        if (i == 1 && j == 1) break;\n        System.out.print(i + "" + j + " ");\n    }\n}`,
+        options: ["00 01 10 11 ", "00 01 ", "00 01 10 ", "00 11 "],
+        answer: 2,
+        explanation: "i=0: j=0 ('00 '), j=1 ('01 '). i=1: j=0 ('10 '), j=1 triggers break out of inner loop. Result: '00 01 10 '."
+      },
+      {
+        id: 43,
+        topic: "Loops",
+        question: "What is the logical error in this loop intended to print 1 to 10?",
+        code: `for (int i = 1; i < 10; i++) {\n    System.out.print(i + " ");\n}`,
+        options: [
+          "The condition should be i <= 10.",
+          "The variable i should start at 0.",
+          "The increment is wrong.",
+          "There is no error."
+        ],
+        answer: 0,
+        explanation: "`i < 10` stops at 9. To print numbers including 10, the condition must be `i <= 10`."
+      },
+
+      // ---------------- MODULE 3: ARRAYS & INDEXING (QUIZ 3) ----------------
+      {
+        id: 44,
+        topic: "Arrays",
+        question: "How do you correctly initialize an array of ten double values in Java?",
+        code: "",
+        options: [
+          "double[] values = new double(10);",
+          "double values[10];",
+          "double[] values = new double[10];",
+          "double values = new double;"
+        ],
+        answer: 2,
+        explanation: "Correct syntax in Java uses square brackets for array creation size: `new double[10]`."
+      },
+      {
+        id: 45,
+        topic: "Arrays",
+        question: "How do you declare and initialize a String array named names with 'Bob', 'Sue', 'Ken'?",
+        code: "",
+        options: [
+          "String [] names = {\"Bob\", \"Sue\", \"Ken\"};",
+          "String names = {\"Bob\", \"Sue\", \"Ken\"};",
+          "String names [] = [Bob, Sue, Ken];",
+          "String [] names = new String[]{Bob, Sue, Ken};"
+        ],
+        answer: 0,
+        explanation: "Array initializer list in Java requires double quotes for string literals inside curly braces `{}`."
+      },
+      {
+        id: 46,
+        topic: "Arrays",
+        question: "How do you access the first element of an array named points?",
+        code: "",
+        options: ["points[1]", "points[0]", "points[points.length]", "points.first()"],
+        answer: 1,
+        explanation: "Arrays in Java are zero-indexed, so the first element is at index 0 (`points[0]`)."
+      },
+      {
+        id: 47,
+        topic: "Arrays",
+        question: "Which statement correctly accesses the fifth element of an array named items?",
+        code: "",
+        options: ["items[5]", "items[4]", "items{5}", "items[items.length]"],
+        answer: 1,
+        explanation: "Due to 0-based indexing, the 5th element is located at index offset 4 (`items[4]`)."
+      },
+      {
+        id: 48,
+        topic: "Arrays",
+        question: "Given `int[] scores = new int[5];`, what updates the second element to 95?",
+        code: "",
+        options: ["scores[2] = 95;", "scores[1] = 95;", "scores[5] = 95;", "scores[0] = 95;"],
+        answer: 1,
+        explanation: "The second element is at index 1 (`scores[1] = 95;`)."
+      },
+      {
+        id: 49,
+        topic: "Arrays",
+        question: "How do you declare an array named prices of type float with length 8?",
+        code: "",
+        options: [
+          "float prices [8];",
+          "float [] prices = new float[8];",
+          "float prices = new float[8];",
+          "float [8] prices;"
+        ],
+        answer: 1,
+        explanation: "Correct syntax specifies type with square brackets followed by assignment `new float[8]`."
+      },
+      {
+        id: 50,
+        topic: "Arrays",
+        question: "How do you find the total number of elements in an array named myList?",
+        code: "",
+        options: ["myList.size()", "myList.length", "myList.count()", "myList.size"],
+        answer: 1,
+        explanation: "In Java, array length is an explicit property (`.length`), NOT a method call like `.size()`."
+      },
+      {
+        id: 51,
+        topic: "Arrays",
+        question: "What will be printed by this code snippet?",
+        code: `int[] numbers = {10, 20, 30, 40};\nSystem.out.println(numbers[numbers.length - 3]);`,
+        options: ["40", "10", "30", "20"],
+        answer: 3,
+        explanation: "`numbers.length` is 4. `4 - 3 = 1`. `numbers[1]` corresponds to value 20."
+      },
+      {
+        id: 52,
+        topic: "Arrays",
+        question: "What will be printed by this String array access?",
+        code: `String [] data = {"Red", "Green", "Blue"};\nSystem.out.println(data[data.length-1]);`,
+        options: ["Red", "Green", "ArrayIndexOutOfBoundsException", "Blue"],
+        answer: 3,
+        explanation: "`data.length` is 3. `data.length - 1` = index 2, which accesses the last element 'Blue'."
+      },
+      {
+        id: 53,
+        topic: "Arrays",
+        question: "In `double[] weights = new double[]{4.5, 6.7};`, how many elements are present?",
+        code: "",
+        options: ["1", "3", "2", "0"],
+        answer: 2,
+        explanation: "The inline initialization contains 2 double values: 4.5 and 6.7."
+      },
+      {
+        id: 54,
+        topic: "Arrays",
+        question: "What is the index of element 99 in `int[] nums = {10, 20, 99, 40};`?",
+        code: "",
+        options: ["1", "3", "2", "0"],
+        answer: 2,
+        explanation: "Element 10 is index 0, 20 is index 1, 99 is at index 2."
+      },
+      {
+        id: 55,
+        topic: "Arrays",
+        question: "What is the output of adding these double array elements?",
+        code: `double[] values = {1.5, 2.5, 3.5};\nSystem.out.println(values[0] + values[1]);`,
+        options: ["5.0", "4.0", "3.0", "7.0"],
+        answer: 1,
+        explanation: "`values[0]` is 1.5, `values[1]` is 2.5. 1.5 + 2.5 = 4.0."
+      },
+      {
+        id: 56,
+        topic: "Arrays",
+        question: "What is the output of the following character array index calculation?",
+        code: `char [ ] letters = new char [4];\nletters[0] = 'a'; letters[1] = 'b'; letters[2] = 'c'; letters[3] = 'd';\nint i = 2;\nSystem.out.println(letters[i + 1]);`,
+        options: ["c", "d", "b", "a"],
+        answer: 1,
+        explanation: "`i + 1` = `2 + 1` = 3. Index 3 contains character 'd'."
+      },
+      {
+        id: 57,
+        topic: "Arrays",
+        question: "What will be printed by this code snippet?",
+        code: `String [] words = {"Start", "Middle", "End" };\nSystem.out.println(words[0]);`,
+        options: ["Middle", "Start", "End", "ArrayIndexOutOfBoundsException"],
+        answer: 1,
+        explanation: "Index 0 accesses the first string in the array: 'Start'."
+      },
+      {
+        id: 58,
+        topic: "Arrays",
+        question: "What is the output of `even[0] + even[2]`?",
+        code: `int [ ] even = {2, 4, 6, 8};\nSystem.out.println( even[0] + even[2] ) ;`,
+        options: ["8", "10", "14", "6"],
+        answer: 0,
+        explanation: "`even[0]` = 2, `even[2]` = 6. Sum = 2 + 6 = 8."
+      },
+      {
+        id: 59,
+        topic: "Arrays",
+        question: "Given `int[] arr = {5, 10, 15, 20, 25};`, what is `arr[4] - arr[1]`?",
+        code: "",
+        options: ["20", "10", "5", "15"],
+        answer: 3,
+        explanation: "`arr[4]` is 25, `arr[1]` is 10. `25 - 10 = 15`."
+      },
+      {
+        id: 60,
+        topic: "Arrays",
+        question: "What is printed by String array element concatenation?",
+        code: `String [ ] s = new String [3];\ns[0] = "A"; s[1] = "B"; s[2] = "C";\nSystem.out.println(s[0] + s[1] + s[2]);`,
+        options: ["A B C", "ABC", "CBA", "A + B + C"],
+        answer: 1,
+        explanation: "Concatenating string elements \"A\" + \"B\" + \"C\" results in \"ABC\"."
+      },
+      {
+        id: 61,
+        topic: "Arrays",
+        question: "What is the output for multiplying `data[2] * data[4]`?",
+        code: `int [ ] data = {1, 3, 5, 7, 9};\nSystem.out.print(data[2] * data[4]);`,
+        options: ["45", "15", "35", "59"],
+        answer: 0,
+        explanation: "`data[2]` is 5, `data[4]` is 9. Product: 5 * 9 = 45."
+      },
+      {
+        id: 62,
+        topic: "Arrays",
+        question: "What is the output of `names[2]`?",
+        code: `String[] names = {"Alice", "Bob", "Charlie"};\nSystem.out.println(names[2]);`,
+        options: ["Alice", "Charlie", "Bob", "ArrayIndexOutOfBoundsException"],
+        answer: 1,
+        explanation: "Index 0: 'Alice', Index 1: 'Bob', Index 2: 'Charlie'."
+      },
+      {
+        id: 63,
+        topic: "Arrays",
+        question: "In `int[] size = new int[]{10, 20, 30, 40};`, how many elements are present?",
+        code: "",
+        options: ["3", "4", "0", "1"],
+        answer: 1,
+        explanation: "The array contains 4 elements: 10, 20, 30, 40."
+      },
+      {
+        id: 64,
+        topic: "Arrays",
+        question: "What is the output of adding `prices[0] + prices[2]`?",
+        code: `double[] prices = {5.5, 10.0, 15.5};\nSystem.out.println(prices[0] + prices[2]);`,
+        options: ["10.0", "21.0", "20.0", "15.5"],
+        answer: 1,
+        explanation: "`prices[0]` is 5.5, `prices[2]` is 15.5. Sum = 5.5 + 15.5 = 21.0."
+      },
+      {
+        id: 65,
+        topic: "Arrays",
+        question: "What is the default value of each element in a newly created int array in Java?",
+        code: "",
+        options: ["null", "0", "1", "It is undefined"],
+        answer: 1,
+        explanation: "In Java, primitive numeric array elements (like `int[]`) are automatically initialized to 0."
+      }
+    ];
+
+    // Core App Controller Logic
+    class QuizApp {
+      constructor() {
+        this.questions = [];
+        this.currentIndex = 0;
+        this.userAnswers = [];
+        this.timer = null;
+        this.secondsElapsed = 0;
+        this.instantFeedback = true;
+        this.chartInstance = null;
+
+        this.initTheme();
+      }
+
+      initTheme() {
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }
+
+      toggleTheme() {
+        if (document.documentElement.classList.contains('dark')) {
+          document.documentElement.classList.remove('dark');
+          localStorage.setItem('theme', 'light');
+        } else {
+          document.documentElement.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
+        }
+      }
+
+      showHome() {
+        this.stopTimer();
+        document.getElementById('view-home').classList.remove('hidden');
+        document.getElementById('view-quiz').classList.add('hidden');
+        document.getElementById('view-results').classList.add('hidden');
+      }
+
+      startQuiz(mode) {
+        this.instantFeedback = document.getElementById('instantFeedbackToggle').checked;
+
+        if (mode === 'all') {
+          this.questions = [...ALL_QUESTIONS];
+        } else if (mode === 'quick') {
+          this.questions = [...ALL_QUESTIONS].sort(() => 0.5 - Math.random()).slice(0, 15);
+        } else {
+          this.questions = ALL_QUESTIONS.filter(q => q.topic === mode);
+        }
+
+        this.currentIndex = 0;
+        this.userAnswers = new Array(this.questions.length).fill(null);
+        this.secondsElapsed = 0;
+
+        document.getElementById('view-home').classList.add('hidden');
+        document.getElementById('view-results').classList.add('hidden');
+        document.getElementById('view-quiz').classList.remove('hidden');
+
+        this.startTimer();
+        this.renderQuestion();
+      }
+
+      startTimer() {
+        this.stopTimer();
+        this.timer = setInterval(() => {
+          this.secondsElapsed++;
+          const mins = String(Math.floor(this.secondsElapsed / 60)).padStart(2, '0');
+          const secs = String(this.secondsElapsed % 60).padStart(2, '0');
+          document.getElementById('timerDisplay').textContent = `${mins}:${secs}`;
+        }, 1000);
+      }
+
+      stopTimer() {
+        if (this.timer) clearInterval(this.timer);
+      }
+
+      renderQuestion() {
+        const q = this.questions[this.currentIndex];
+        const total = this.questions.length;
+
+        // Header info
+        document.getElementById('currentQNum').textContent = this.currentIndex + 1;
+        document.getElementById('totalQNum').textContent = total;
+        document.getElementById('quizTopicBadge').textContent = q.topic;
+        
+        // Progress Bar
+        const pct = ((this.currentIndex + 1) / total) * 100;
+        document.getElementById('progressBar').style.width = `${pct}%`;
+
+        // Live score
+        const correctCount = this.userAnswers.filter((ans, idx) => ans === this.questions[idx].answer).length;
+        document.getElementById('scoreTracker').textContent = `${correctCount} Correct`;
+
+        // Question text
+        document.getElementById('questionText').textContent = `${this.currentIndex + 1}. ${q.question}`;
+
+        // Code Snippet block
+        const codeWrapper = document.getElementById('codeSnippetWrapper');
+        if (q.code && q.code.trim().length > 0) {
+          document.getElementById('codeSnippet').textContent = q.code;
+          codeWrapper.classList.remove('hidden');
+        } else {
+          codeWrapper.classList.add('hidden');
+        }
+
+        // Render Options
+        const container = document.getElementById('optionsContainer');
+        container.innerHTML = '';
+
+        q.options.forEach((optText, optIdx) => {
+          const isSelected = this.userAnswers[this.currentIndex] === optIdx;
+          const optBtn = document.createElement('button');
+          optBtn.className = `w-full text-left p-4 rounded-xl border text-xs sm:text-sm font-medium transition-all flex items-center justify-between group ${
+            isSelected 
+              ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/40 text-blue-900 dark:text-blue-200 ring-2 ring-blue-500/20' 
+              : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200'
+          }`;
+
+          optBtn.onclick = () => this.selectAnswer(optIdx);
+
+          optBtn.innerHTML = `
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs ${
+                isSelected 
+                  ? 'bg-blue-600 text-white' 
+                  : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 group-hover:bg-blue-500 group-hover:text-white transition'
+              }">
+                ${String.fromCharCode(65 + optIdx)}
+              </span>
+              <span>${this.escapeHtml(optText)}</span>
+            </div>
+            ${isSelected ? '<i class="fa-solid fa-circle-check text-blue-600 dark:text-blue-400 text-base"></i>' : ''}
+          `;
+          container.appendChild(optBtn);
+        });
+
+        // Instant Explanation Box handling
+        const expBox = document.getElementById('explanationBox');
+        if (this.instantFeedback && this.userAnswers[this.currentIndex] !== null) {
+          const userAns = this.userAnswers[this.currentIndex];
+          const isCorrect = userAns === q.answer;
+
+          expBox.classList.remove('hidden', 'bg-emerald-50', 'bg-rose-50', 'border-emerald-200', 'border-rose-200', 'dark:bg-emerald-950/40', 'dark:bg-rose-950/40', 'dark:border-emerald-800', 'dark:border-rose-800');
+
+          if (isCorrect) {
+            expBox.classList.add('bg-emerald-50', 'border-emerald-200', 'dark:bg-emerald-950/40', 'dark:border-emerald-800');
+            document.getElementById('explanationTitle').innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 dark:text-emerald-400"></i> <span class="text-emerald-800 dark:text-emerald-300">Correct!</span>`;
+          } else {
+            expBox.classList.add('bg-rose-50', 'border-rose-200', 'dark:bg-rose-950/40', 'dark:border-rose-800');
+            document.getElementById('explanationTitle').innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 dark:text-rose-400"></i> <span class="text-rose-800 dark:text-rose-300">Incorrect (Correct Answer: ${String.fromCharCode(65 + q.answer)})</span>`;
+          }
+          document.getElementById('explanationText').textContent = q.explanation;
+        } else {
+          expBox.classList.add('hidden');
+        }
+
+        // Navigation controls state
+        document.getElementById('prevBtn').disabled = this.currentIndex === 0;
+        
+        const nextBtn = document.getElementById('nextBtn');
+        if (this.currentIndex === total - 1) {
+          nextBtn.innerHTML = `<span>Finish Quiz</span> <i class="fa-solid fa-flag-checkered"></i>`;
+          nextBtn.className = "px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-500/20 transition flex items-center gap-1.5";
+        } else {
+          nextBtn.innerHTML = `<span>Next Question</span> <i class="fa-solid fa-arrow-right"></i>`;
+          nextBtn.className = "px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 transition flex items-center gap-1.5";
+        }
+      }
+
+      selectAnswer(optIdx) {
+        this.userAnswers[this.currentIndex] = optIdx;
+        this.renderQuestion();
+      }
+
+      nextQuestion() {
+        if (this.currentIndex < this.questions.length - 1) {
+          this.currentIndex++;
+          this.renderQuestion();
+        } else {
+          this.finishQuiz();
+        }
+      }
+
+      prevQuestion() {
+        if (this.currentIndex > 0) {
+          this.currentIndex--;
+          this.renderQuestion();
+        }
+      }
+
+      finishQuiz() {
+        this.stopTimer();
+
+        // Calculate scores overall & per topic
+        const topicStats = {
+          Conditionals: { correct: 0, total: 0, title: "Conditionals & Logic" },
+          Loops: { correct: 0, total: 0, title: "Loops & Iteration" },
+          Arrays: { correct: 0, total: 0, title: "Arrays & Indexing" }
+        };
+
+        let overallCorrect = 0;
+
+        this.questions.forEach((q, idx) => {
+          const userAns = this.userAnswers[idx];
+          const isCorrect = userAns === q.answer;
+          
+          if (!topicStats[q.topic]) {
+            topicStats[q.topic] = { correct: 0, total: 0, title: q.topic };
+          }
+
+          topicStats[q.topic].total++;
+          if (isCorrect) {
+            topicStats[q.topic].correct++;
+            overallCorrect++;
+          }
+        });
+
+        const totalQ = this.questions.length;
+        const accuracyPct = Math.round((overallCorrect / totalQ) * 100) || 0;
+
+        // Render Summary Stats
+        document.getElementById('resScore').textContent = `${overallCorrect}/${totalQ}`;
+        document.getElementById('resAccuracy').textContent = `${accuracyPct}%`;
+        
+        const mins = String(Math.floor(this.secondsElapsed / 60)).padStart(2, '0');
+        const secs = String(this.secondsElapsed % 60).padStart(2, '0');
+        document.getElementById('resTime').textContent = `${mins}:${secs}`;
+
+        // Grade calculation
+        let grade = "F";
+        if (accuracyPct >= 90) grade = "A";
+        else if (accuracyPct >= 80) grade = "B";
+        else if (accuracyPct >= 70) grade = "C";
+        else if (accuracyPct >= 60) grade = "D";
+        document.getElementById('resGrade').textContent = grade;
+
+        // Diagnostic Strengths & Weaknesses analysis logic
+        const strengthsList = document.getElementById('strengthsList');
+        const weaknessesList = document.getElementById('weaknessesList');
+        strengthsList.innerHTML = '';
+        weaknessesList.innerHTML = '';
+
+        let hasStrengths = false;
+        let hasWeaknesses = false;
+
+        Object.keys(topicStats).forEach(topic => {
+          const stat = topicStats[topic];
+          if (stat.total === 0) return;
+          const pct = Math.round((stat.correct / stat.total) * 100);
+
+          if (pct >= 80) {
+            hasStrengths = true;
+            const li = document.createElement('li');
+            li.className = 'flex items-start gap-2 bg-white dark:bg-slate-900 p-3 rounded-xl border border-emerald-200 dark:border-emerald-800/60 shadow-sm';
+            li.innerHTML = `
+              <i class="fa-solid fa-circle-check text-emerald-500 mt-0.5"></i>
+              <div>
+                <span class="font-bold text-slate-900 dark:text-white">${stat.title} (${pct}%)</span>
+                <p class="text-slate-500 dark:text-slate-400 text-xs mt-0.5">Strong mastery over core syntax and edge cases in this module.</p>
+              </div>
+            `;
+            strengthsList.appendChild(li);
+          } else if (pct < 70) {
+            hasWeaknesses = true;
+            const li = document.createElement('li');
+            li.className = 'flex items-start gap-2 bg-white dark:bg-slate-900 p-3 rounded-xl border border-rose-200 dark:border-rose-800/60 shadow-sm';
+            
+            let tip = "";
+            if (topic === "Conditionals") {
+              tip = "Focus on switch fall-through mechanics, ternary conditional precedence, and missing curly brace scope rules.";
+            } else if (topic === "Loops") {
+              tip = "Review break vs continue execution flow, counter variable mutations inside loop bodies, and do-while guarantees.";
+            } else {
+              tip = "Practice 0-based array indexing, length property vs size() method, and array default initializers.";
+            }
+
+            li.innerHTML = `
+              <i class="fa-solid fa-triangle-exclamation text-rose-500 mt-0.5"></i>
+              <div>
+                <span class="font-bold text-slate-900 dark:text-white">${stat.title} (${pct}%)</span>
+                <p class="text-slate-500 dark:text-slate-400 text-xs mt-0.5">${tip}</p>
+              </div>
+            `;
+            weaknessesList.appendChild(li);
+          }
+        });
+
+        if (!hasStrengths) {
+          strengthsList.innerHTML = `<li class="text-xs text-slate-500 font-medium">Keep practicing to achieve >80% in individual modules!</li>`;
+        }
+        if (!hasWeaknesses) {
+          weaknessesList.innerHTML = `<li class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">No critical weakness detected! Outstanding understanding across all modules.</li>`;
+        }
+
+        // Render Module Chart
+        this.renderChart(topicStats);
+
+        // Detailed Question Review Section
+        const reviewContainer = document.getElementById('questionsReviewContainer');
+        reviewContainer.innerHTML = '';
+
+        this.questions.forEach((q, idx) => {
+          const userAns = this.userAnswers[idx];
+          const isCorrect = userAns === q.answer;
+
+          const item = document.createElement('div');
+          item.className = `p-4 rounded-xl border text-xs sm:text-sm space-y-2 ${
+            isCorrect 
+              ? 'border-emerald-200 bg-emerald-50/40 dark:bg-emerald-950/20 dark:border-emerald-900/40' 
+              : 'border-rose-200 bg-rose-50/40 dark:bg-rose-950/20 dark:border-rose-900/40'
+          }`;
+
+          item.innerHTML = `
+            <div class="flex items-start justify-between gap-2 font-bold">
+              <span class="text-slate-900 dark:text-white">${idx + 1}. ${this.escapeHtml(q.question)}</span>
+              <span class="px-2 py-0.5 rounded text-xs font-semibold ${isCorrect ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'}">
+                ${isCorrect ? 'Correct' : 'Incorrect'}
+              </span>
+            </div>
+            ${q.code ? `<pre class="p-2.5 rounded bg-slate-950 text-slate-200 font-mono text-xs overflow-x-auto"><code>${this.escapeHtml(q.code)}</code></pre>` : ''}
+            <div class="space-y-1 text-slate-700 dark:text-slate-300">
+              <div>Your answer: <span class="font-bold ${isCorrect ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}">${userAns !== null ? String.fromCharCode(65 + userAns) + ') ' + this.escapeHtml(q.options[userAns]) : 'Unanswered'}</span></div>
+              ${!isCorrect ? `<div>Correct answer: <span class="font-bold text-emerald-600 dark:text-emerald-400">${String.fromCharCode(65 + q.answer)}) ${this.escapeHtml(q.options[q.answer])}</span></div>` : ''}
+              <div class="text-xs text-slate-500 dark:text-slate-400 italic pt-1">${this.escapeHtml(q.explanation)}</div>
+            </div>
+          `;
+          reviewContainer.appendChild(item);
+        });
+
+        // Switch to Results View
+        document.getElementById('view-quiz').classList.add('hidden');
+        document.getElementById('view-results').classList.remove('hidden');
+      }
+
+      renderChart(topicStats) {
+        const ctx = document.getElementById('topicChart').getContext('2d');
+        const labels = Object.keys(topicStats).map(t => topicStats[t].title);
+        const data = Object.keys(topicStats).map(t => {
+          const stat = topicStats[t];
+          return stat.total > 0 ? Math.round((stat.correct / stat.total) * 100) : 0;
+        });
+
+        if (this.chartInstance) {
+          this.chartInstance.destroy();
+        }
+
+        const isDark = document.documentElement.classList.contains('dark');
+
+        this.chartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Accuracy (%)',
+              data: data,
+              backgroundColor: ['#3b82f6', '#f59e0b', '#10b981'],
+              borderRadius: 8,
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 100,
+                ticks: {
+                  color: isDark ? '#94a3b8' : '#64748b',
+                  callback: value => value + '%'
+                },
+                grid: {
+                  color: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)'
+                }
+              },
+              x: {
+                ticks: {
+                  color: isDark ? '#94a3b8' : '#64748b'
+                },
+                grid: { display: false }
+              }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+      }
+
+      restartQuiz() {
+        this.currentIndex = 0;
+        this.userAnswers = new Array(this.questions.length).fill(null);
+        this.secondsElapsed = 0;
+
+        document.getElementById('view-results').classList.add('hidden');
+        document.getElementById('view-quiz').classList.remove('hidden');
+
+        this.startTimer();
+        this.renderQuestion();
+      }
+
+      escapeHtml(str) {
+        if (!str) return '';
+        return str
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+    }
+
+    // Instantiation
+    let app;
+    window.onload = function() {
+      app = new QuizApp();
+    };
+  </script>
+</body>
+</html>
